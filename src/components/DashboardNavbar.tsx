@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { Bell, Menu, X, Check, Home, List, CheckCircle2, LogOut } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface DashboardNavbarProps {
-  activeTab: 'home' | 'habits';
+  activeTab: 'habits';
 }
 
 export function DashboardNavbar({ activeTab }: DashboardNavbarProps) {
@@ -13,6 +13,14 @@ export function DashboardNavbar({ activeTab }: DashboardNavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const [notifications, setNotifications] = useState([
     { id: 1, title: 'Hábito Concluído', description: 'Você completou "Beber 2L de água"', time: '5 min atrás' },
@@ -31,7 +39,7 @@ export function DashboardNavbar({ activeTab }: DashboardNavbarProps) {
   };
 
   return (
-    <header className="bg-gh-bg py-3 px-4 md:px-6 sticky top-0 z-50">
+    <header className="bg-transparent md:bg-gh-bg py-3 px-4 md:px-6 sticky top-0 z-50">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           {/* Mobile Menu Toggle - Moved to Left */}
@@ -44,10 +52,10 @@ export function DashboardNavbar({ activeTab }: DashboardNavbarProps) {
 
           {/* Mobile Active Tab Name */}
           <span className="md:hidden font-bold text-white text-lg ml-2">
-            {activeTab === 'home' ? 'Home' : 'Hábitos'}
+            Hábitos
           </span>
 
-          <button onClick={() => navigate('/home')} className="hidden md:flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <button onClick={() => navigate('/habits')} className="hidden md:flex items-center gap-2 hover:opacity-80 transition-opacity">
             <div className="relative flex items-center justify-center">
               <svg width="0" height="0" className="absolute">
                 <linearGradient id="dash-logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -62,12 +70,6 @@ export function DashboardNavbar({ activeTab }: DashboardNavbarProps) {
           
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-4 text-sm font-semibold text-white h-8">
-            <button 
-              onClick={() => navigate('/home')} 
-              className={`h-full px-1 transition-all border-b-2 flex items-center ${activeTab === 'home' ? 'font-bold text-white border-gh-blue' : 'text-gh-text-secondary hover:text-white border-transparent'}`}
-            >
-              Home
-            </button>
             <button 
               onClick={() => navigate('/habits')} 
               className={`h-full px-1 transition-all border-b-2 flex items-center ${activeTab === 'habits' ? 'font-bold text-white border-gh-blue' : 'text-gh-text-secondary hover:text-white border-transparent'}`}
@@ -93,58 +95,89 @@ export function DashboardNavbar({ activeTab }: DashboardNavbarProps) {
             <AnimatePresence>
               {isNotificationsOpen && (
                 <>
-                  <div className="fixed inset-0 z-40" onClick={() => setIsNotificationsOpen(false)} />
+                  {/* Backdrop */}
+                  <div 
+                    className={`fixed inset-0 bg-black/50 md:bg-transparent ${isMobile ? 'z-[2000]' : 'z-40'}`} 
+                    onClick={() => setIsNotificationsOpen(false)} 
+                  />
+                  
+                  {/* Modal/Dropdown */}
                   <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.15 }}
-                    className="fixed left-4 right-4 top-[60px] md:absolute md:left-auto md:right-0 md:top-full md:mt-2 md:w-80 bg-gh-card border border-gh-border rounded-xl shadow-2xl z-50 overflow-hidden"
+                    initial={isMobile ? { y: "100%" } : { opacity: 0, y: 10, scale: 0.95 }}
+                    animate={isMobile ? { y: 0 } : { opacity: 1, y: 0, scale: 1 }}
+                    exit={isMobile ? { y: "100%" } : { opacity: 0, y: 10, scale: 0.95 }}
+                    transition={isMobile ? { type: "spring", damping: 30, stiffness: 300 } : { duration: 0.15 }}
+                    className={`
+                      bg-[#070e18] border-gh-border md:border md:rounded-xl md:shadow-2xl overflow-hidden flex flex-col
+                      ${isMobile 
+                        ? 'fixed inset-0 z-[2001] w-full h-full' 
+                        : 'absolute right-0 top-full mt-2 w-80 z-50'
+                      }
+                    `}
                   >
-                    <div className="px-4 py-3 border-b border-gh-border bg-gh-bg/50 flex items-center justify-between">
-                      <h3 className="text-sm font-bold text-white">Notificações de Hábitos</h3>
-                      {notifications.length > 0 && (
+                    <div className="flex flex-col h-full">
+                      {/* Header */}
+                      <div className="px-4 pt-4 pb-2 flex items-center justify-between shrink-0">
+                        <div className="flex items-center gap-2">
+                          <button 
+                            onClick={() => setIsNotificationsOpen(false)}
+                            className="md:hidden text-white hover:opacity-70 transition-opacity"
+                          >
+                            <X size={20} />
+                          </button>
+                          <h3 className="text-lg font-bold text-white tracking-tight">Notificações</h3>
+                        </div>
                         <button 
                           onClick={() => setNotifications([])}
-                          className="text-[10px] text-gh-text-secondary hover:text-red-400 transition-colors"
+                          className="text-[10px] font-medium text-gh-text-secondary hover:text-white transition-colors"
                         >
-                          Limpar tudo
-                        </button>
-                      )}
-                    </div>
-                    <div className="max-h-96 overflow-y-auto">
-                      {notifications.length === 0 ? (
-                        <div className="px-4 py-8 text-center">
-                          <p className="text-sm text-gh-text-secondary">Nenhuma notificação por aqui.</p>
-                        </div>
-                      ) : (
-                        notifications.map((notif) => (
-                          <div key={notif.id} className="group px-4 py-3 border-b border-gh-border last:border-0 hover:bg-gh-bg/30 transition-colors flex gap-3 relative">
-                            <div className="w-8 h-8 rounded-full bg-gh-green/20 flex items-center justify-center text-gh-green shrink-0">
-                              <Check size={14} />
-                            </div>
-                            <div className="flex-1 pr-6">
-                              <p className="text-xs font-bold text-white">{notif.title}</p>
-                              <p className="text-[11px] text-gh-text-secondary mt-0.5">{notif.description}</p>
-                              <p className="text-[10px] text-gh-blue mt-1">{notif.time}</p>
-                            </div>
-                            <button 
-                              onClick={() => removeNotification(notif.id)}
-                              className="absolute right-4 top-3 text-gh-text-secondary hover:text-white opacity-0 group-hover:opacity-100 transition-all"
-                            >
-                              <X size={14} />
-                            </button>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                    {notifications.length > 0 && (
-                      <div className="px-4 py-2 bg-gh-bg/50 text-center">
-                        <button className="text-[10px] font-bold text-gh-text-secondary hover:text-white transition-colors">
-                          Ver todas as atividades
+                          Limpar
                         </button>
                       </div>
-                    )}
+
+
+
+                      {/* Content List */}
+                      <div className="flex-1 overflow-y-auto px-4">
+                        {notifications.length === 0 ? (
+                          <div className="py-8 text-center flex flex-col items-center justify-center h-full text-gh-text-secondary">
+                            <Bell size={32} className="mb-3 opacity-20" />
+                            <p className="text-xs font-medium">Nenhuma notificação por aqui.</p>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col">
+                            {notifications.map((notif) => (
+                              <div key={notif.id} className="py-3 border-b border-gh-border last:border-0 flex gap-3 group cursor-pointer">
+                                <div className="flex-1 flex flex-col justify-center">
+                                  <div>
+                                    <h4 className="text-xs font-bold text-white mb-1 leading-tight line-clamp-1">
+                                      {notif.title}
+                                    </h4>
+                                    <p className="text-[10px] text-gh-text-secondary line-clamp-2 mb-1.5 leading-relaxed">
+                                      {notif.description}
+                                    </p>
+                                  </div>
+                                  <p className="text-[9px] font-bold text-gh-text-secondary uppercase tracking-wider opacity-60">
+                                    Sistema • {notif.time}
+                                  </p>
+                                </div>
+                                
+                                {/* Right Thumbnail/Icon */}
+                                <div className="w-12 h-12 rounded-lg bg-gh-card border border-gh-border flex items-center justify-center shrink-0 group-hover:border-gh-blue/30 transition-colors">
+                                  {notif.title.includes('Hábito') ? (
+                                    <CheckCircle2 size={18} className="text-gh-green" />
+                                  ) : notif.title.includes('Tarefa') ? (
+                                    <List size={18} className="text-gh-blue" />
+                                  ) : (
+                                    <Bell size={18} className="text-purple-400" />
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </motion.div>
                 </>
               )}
@@ -214,9 +247,9 @@ export function DashboardNavbar({ activeTab }: DashboardNavbarProps) {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="md:hidden fixed top-0 left-0 bottom-0 w-64 bg-gh-card border-r border-gh-border z-50 shadow-2xl"
+              className="md:hidden fixed top-0 left-0 bottom-0 w-64 bg-[#070e18] border-r border-gh-border z-50 shadow-2xl flex flex-col"
             >
-              <div className="p-4 flex flex-col h-full">
+              <div className="p-4 flex-1">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-2">
                     <div className="relative flex items-center justify-center">
@@ -243,13 +276,6 @@ export function DashboardNavbar({ activeTab }: DashboardNavbarProps) {
                   <h3 className="px-3 text-xs font-bold text-gh-text-secondary uppercase tracking-wider mb-2">Navegação</h3>
                   <div className="flex flex-col gap-1">
                     <button 
-                      onClick={() => { navigate('/home'); setIsMenuOpen(false); }}
-                      className={`flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg transition-colors w-full text-left ${activeTab === 'home' ? 'text-white bg-gh-blue/10' : 'text-gh-text-secondary hover:text-white hover:bg-white/5'}`}
-                    >
-                      <Home size={18} className={activeTab === 'home' ? 'text-gh-blue' : 'text-gh-text-secondary'} />
-                      Home
-                    </button>
-                    <button 
                       onClick={() => { navigate('/habits'); setIsMenuOpen(false); }}
                       className={`flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg transition-colors w-full text-left ${activeTab === 'habits' ? 'text-white bg-gh-blue/10' : 'text-gh-text-secondary hover:text-white hover:bg-white/5'}`}
                     >
@@ -258,8 +284,9 @@ export function DashboardNavbar({ activeTab }: DashboardNavbarProps) {
                     </button>
                   </div>
                 </nav>
+              </div>
 
-                <div className="mt-auto border-t border-gh-border p-3 bg-gh-bg/30">
+              <div className="border-t border-gh-border p-3 bg-gh-bg">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-lg bg-gh-blue flex items-center justify-center text-xs text-white font-bold shadow-lg shadow-gh-blue/20 ring-1 ring-gh-blue/20">
@@ -278,7 +305,6 @@ export function DashboardNavbar({ activeTab }: DashboardNavbarProps) {
                     </button>
                   </div>
                 </div>
-              </div>
             </motion.div>
           </>
         )}

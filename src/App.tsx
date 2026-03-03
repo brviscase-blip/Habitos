@@ -7,7 +7,6 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LandingPage } from './pages/Landing/LandingPage';
 import { LoginPage } from './pages/Login/LoginPage';
-import { HomePage } from './pages/Home/HomePage';
 import { HabitsPage } from './pages/Habits/HabitsPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -51,14 +50,6 @@ export default function App() {
       <Routes>
         <Route path="/" element={<RootRoute />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route 
-          path="/home" 
-          element={
-            <ProtectedRoute>
-              <HomePage />
-            </ProtectedRoute>
-          } 
-        />
         <Route 
           path="/habits" 
           element={

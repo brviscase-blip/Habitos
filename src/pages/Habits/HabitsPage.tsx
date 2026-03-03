@@ -17,44 +17,6 @@ export function HabitsPage() {
       <DashboardNavbar activeTab="habits" />
       <div className={`relative ${isTaskModalOpen || isHabitModalOpen ? 'z-[2000]' : 'z-10'}`}>
         <div className="w-full px-4 md:px-6 py-6 md:py-8">
-        {/* Mobile Navigation: Segmented Control */}
-        <div className="md:hidden mb-6 flex justify-center">
-          <div className="inline-flex p-1 bg-gh-card/40 border border-gh-border/60 rounded-xl relative shadow-inner">
-            <button 
-              onClick={() => setActiveSubTab('today')}
-              className={`relative z-10 flex items-center gap-2 px-6 py-2.5 text-xs font-black uppercase tracking-widest transition-all rounded-lg ${
-                activeSubTab === 'today' ? 'text-white' : 'text-gh-text-secondary hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <CalendarIcon size={16} className={activeSubTab === 'today' ? 'text-gh-blue' : ''} />
-              Hoje
-              {activeSubTab === 'today' && (
-                <motion.div 
-                  layoutId="activeTabMobile"
-                  className="absolute inset-0 bg-gh-bg rounded-lg -z-10 shadow-lg"
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                />
-              )}
-            </button>
-            <button 
-              onClick={() => setActiveSubTab('register')}
-              className={`relative z-10 flex items-center gap-2 px-6 py-2.5 text-xs font-black uppercase tracking-widest transition-all rounded-lg ${
-                activeSubTab === 'register' ? 'text-white' : 'text-gh-text-secondary hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <List size={16} className={activeSubTab === 'register' ? 'text-gh-blue' : ''} />
-              Cadastro
-              {activeSubTab === 'register' && (
-                <motion.div 
-                  layoutId="activeTabMobile"
-                  className="absolute inset-0 bg-gh-bg rounded-lg -z-10 shadow-lg"
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                />
-              )}
-            </button>
-          </div>
-        </div>
-
         {/* Desktop Navigation: Sleek Underline Tabs */}
         <div className="hidden md:flex items-center gap-8 mb-8 border-b border-gh-border">
           <button 
@@ -80,7 +42,7 @@ export function HabitsPage() {
             }`}
           >
             <List size={18} />
-            Cadastro
+            Hábitos
             {activeSubTab === 'register' && (
               <motion.div 
                 layoutId="activeTabDesktop"
@@ -91,7 +53,7 @@ export function HabitsPage() {
           </button>
         </div>
 
-        <main>
+        <main className="pb-24 md:pb-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeSubTab}
@@ -111,30 +73,46 @@ export function HabitsPage() {
       </div>
       </div>
 
-      {/* Floating Action Button - Fixed Position Outside Animated Container */}
-      <AnimatePresence>
-        {!(isTaskModalOpen || isHabitModalOpen) && (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.5, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.5, y: 20 }}
-            className="fixed bottom-8 left-0 right-0 flex justify-center z-30 pointer-events-none md:hidden"
+      {/* Mobile Bottom Navigation Bar */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 h-[80px] bg-gh-card border-t border-gh-border z-40 flex items-center justify-between px-10 pb-2">
+        {/* Left Tab: Hoje */}
+        <button 
+          onClick={() => setActiveSubTab('today')}
+          className={`flex flex-col items-center gap-1 transition-colors ${
+            activeSubTab === 'today' ? 'text-white' : 'text-gh-text-secondary hover:text-white'
+          }`}
+        >
+          <CalendarIcon size={24} className={activeSubTab === 'today' ? 'text-gh-blue drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]' : ''} />
+          <span className="text-[10px] font-bold uppercase tracking-wider">Hoje</span>
+        </button>
+
+        {/* Center Action: + */}
+        <div className="absolute left-1/2 -translate-x-1/2 -top-6">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => activeSubTab === 'today' ? setIsTaskModalOpen(true) : setIsHabitModalOpen(true)}
+            className={`w-16 h-16 rounded-full text-white flex items-center justify-center transition-all shadow-[0_8px_25px_rgba(0,0,0,0.5)] ${
+              activeSubTab === 'today' 
+                ? 'bg-gh-blue shadow-[0_8px_30px_rgba(47,129,247,0.4)]' 
+                : 'bg-gh-green shadow-[0_8px_30px_rgba(35,134,54,0.4)]'
+            }`}
           >
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => activeSubTab === 'today' ? setIsTaskModalOpen(true) : setIsHabitModalOpen(true)}
-              className={`pointer-events-auto w-14 h-14 rounded-full text-white flex items-center justify-center transition-colors ${
-                activeSubTab === 'today' 
-                  ? 'bg-gh-blue shadow-[0_8px_30px_rgba(47,129,247,0.4)] hover:bg-gh-blue/90' 
-                  : 'bg-gh-green shadow-[0_8px_30px_rgba(35,134,54,0.4)] hover:bg-gh-green-hover'
-              }`}
-            >
-              <Plus size={28} strokeWidth={3} />
-            </motion.button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <Plus size={32} strokeWidth={3} />
+          </motion.button>
+        </div>
+
+        {/* Right Tab: Hábitos */}
+        <button 
+          onClick={() => setActiveSubTab('register')}
+          className={`flex flex-col items-center gap-1 transition-colors ${
+            activeSubTab === 'register' ? 'text-white' : 'text-gh-text-secondary hover:text-white'
+          }`}
+        >
+          <List size={24} className={activeSubTab === 'register' ? 'text-gh-blue drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]' : ''} />
+          <span className="text-[10px] font-bold uppercase tracking-wider">Hábitos</span>
+        </button>
+      </div>
     </div>
   );
 }

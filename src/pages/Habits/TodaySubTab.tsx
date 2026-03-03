@@ -192,7 +192,7 @@ export function TodaySubTab({ isModalOpen, setIsModalOpen }: TodaySubTabProps) {
     <div className="w-full max-w-5xl mx-auto">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 bg-gh-card border border-gh-border p-4 rounded-xl shadow-sm">
         <div className="flex items-center gap-2 md:gap-4 w-full sm:w-auto justify-center sm:justify-start">
-          <Button variant="ghost" size="sm" onClick={() => setSelectedDate(subDays(selectedDate, 1))} className="hover:bg-gh-bg h-10 w-10 p-0 flex-shrink-0">
+          <Button variant="ghost" size="sm" onClick={() => setSelectedDate(subDays(selectedDate, 1))} className="hover:bg-gh-bg h-10 w-10 p-0 flex-shrink-0 focus:ring-0 focus:ring-offset-0">
             <ChevronLeft size={20} />
           </Button>
           <div className="text-center w-[220px] sm:w-[260px] md:w-[320px] flex-shrink-0">
@@ -203,7 +203,7 @@ export function TodaySubTab({ isModalOpen, setIsModalOpen }: TodaySubTabProps) {
               {format(selectedDate, 'dd/MM/yyyy')}
             </p>
           </div>
-          <Button variant="ghost" size="sm" onClick={() => setSelectedDate(addDays(selectedDate, 1))} className="hover:bg-gh-bg h-10 w-10 p-0 flex-shrink-0">
+          <Button variant="ghost" size="sm" onClick={() => setSelectedDate(addDays(selectedDate, 1))} className="hover:bg-gh-bg h-10 w-10 p-0 flex-shrink-0 focus:ring-0 focus:ring-offset-0">
             <ChevronRight size={20} />
           </Button>
         </div>
