@@ -27,16 +27,16 @@ export function LoginPage() {
       <BackgroundGlow />
       
       {/* Navbar-style Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-gh-border bg-gh-bg/80 backdrop-blur-md">
+      <header className="hidden md:block sticky top-0 z-50 w-full border-b border-gh-border bg-gh-bg/80 backdrop-blur-md">
         <div className="container mx-auto flex h-16 items-center px-4 md:px-6">
-          <Button variant="outline" size="sm" onClick={() => navigate('/')} className="gap-2">
+          <Button variant="outline" size="sm" onClick={() => navigate('/')} className="gap-2 hidden md:flex">
             <ArrowLeft size={16} />
             Voltar
           </Button>
         </div>
       </header>
 
-      <div className="flex-1 flex flex-col items-center justify-start pt-10 md:pt-20 p-4 relative z-10">
+      <div className="flex-1 flex flex-col items-center justify-center md:justify-start md:pt-20 p-4 relative z-10">
         <div className="mb-10 flex flex-col items-center">
         <div className="relative flex items-center justify-center mb-6">
           <svg width="0" height="0" className="absolute">

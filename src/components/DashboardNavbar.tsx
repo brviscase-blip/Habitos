@@ -239,25 +239,23 @@ export function DashboardNavbar({ activeTab }: DashboardNavbarProps) {
                   </button>
                 </div>
 
-                <nav className="flex flex-col gap-1 mt-2">
-                  <div className="px-3 py-2">
-                    <h3 className="text-xs font-semibold text-gh-text-secondary uppercase tracking-wider mb-2">Navegação</h3>
-                    <div className="flex flex-col gap-1">
-                      <button 
-                        onClick={() => { navigate('/home'); setIsMenuOpen(false); }}
-                        className={`flex items-center gap-3 px-2 py-2 text-sm rounded-md transition-colors w-full text-left ${activeTab === 'home' ? 'text-white bg-white/5 font-medium' : 'text-gh-text-secondary hover:text-white hover:bg-white/5'}`}
-                      >
-                        <Home size={16} className={activeTab === 'home' ? 'text-gh-blue' : 'text-gh-text-secondary'} />
-                        Home
-                      </button>
-                      <button 
-                        onClick={() => { navigate('/habits'); setIsMenuOpen(false); }}
-                        className={`flex items-center gap-3 px-2 py-2 text-sm rounded-md transition-colors w-full text-left ${activeTab === 'habits' ? 'text-white bg-white/5 font-medium' : 'text-gh-text-secondary hover:text-white hover:bg-white/5'}`}
-                      >
-                        <List size={16} className={activeTab === 'habits' ? 'text-gh-blue' : 'text-gh-text-secondary'} />
-                        Hábitos
-                      </button>
-                    </div>
+                <nav className="flex flex-col mt-4 px-2">
+                  <h3 className="px-3 text-xs font-bold text-gh-text-secondary uppercase tracking-wider mb-2">Navegação</h3>
+                  <div className="flex flex-col gap-1">
+                    <button 
+                      onClick={() => { navigate('/home'); setIsMenuOpen(false); }}
+                      className={`flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg transition-colors w-full text-left ${activeTab === 'home' ? 'text-white bg-gh-blue/10' : 'text-gh-text-secondary hover:text-white hover:bg-white/5'}`}
+                    >
+                      <Home size={18} className={activeTab === 'home' ? 'text-gh-blue' : 'text-gh-text-secondary'} />
+                      Home
+                    </button>
+                    <button 
+                      onClick={() => { navigate('/habits'); setIsMenuOpen(false); }}
+                      className={`flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg transition-colors w-full text-left ${activeTab === 'habits' ? 'text-white bg-gh-blue/10' : 'text-gh-text-secondary hover:text-white hover:bg-white/5'}`}
+                    >
+                      <List size={18} className={activeTab === 'habits' ? 'text-gh-blue' : 'text-gh-text-secondary'} />
+                      Hábitos
+                    </button>
                   </div>
                 </nav>
 
