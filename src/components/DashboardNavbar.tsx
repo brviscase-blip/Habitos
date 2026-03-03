@@ -31,7 +31,7 @@ export function DashboardNavbar({ activeTab }: DashboardNavbarProps) {
   };
 
   return (
-    <header className="bg-gh-card border-b border-gh-border py-3 px-4 md:px-6 sticky top-0 z-50">
+    <header className="bg-gh-card border-b-0 md:border-b border-gh-border py-3 px-4 md:px-6 sticky top-0 z-50">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           {/* Mobile Menu Toggle - Moved to Left */}

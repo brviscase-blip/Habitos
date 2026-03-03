@@ -23,7 +23,7 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gh-bg flex flex-col relative overflow-hidden">
+    <div className="h-screen w-screen bg-gh-bg flex flex-col relative overflow-hidden fixed inset-0 touch-none">
       <BackgroundGlow />
       
       {/* Navbar-style Header */}
