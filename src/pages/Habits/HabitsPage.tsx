@@ -14,9 +14,8 @@ export function HabitsPage() {
   return (
     <div className="min-h-screen bg-gh-bg text-gh-text-primary font-sans relative overflow-hidden">
       <BackgroundGlow />
-      <div className="relative z-10">
-        <DashboardNavbar activeTab="habits" />
-
+      <DashboardNavbar activeTab="habits" />
+      <div className={`relative ${isTaskModalOpen || isHabitModalOpen ? 'z-[2000]' : 'z-10'}`}>
         <div className="w-full px-4 md:px-6 py-6 md:py-8">
         {/* Mobile Navigation: Segmented Control */}
         <div className="md:hidden mb-6 flex justify-center">
@@ -113,20 +112,29 @@ export function HabitsPage() {
       </div>
 
       {/* Floating Action Button - Fixed Position Outside Animated Container */}
-      <div className="fixed bottom-8 left-0 right-0 flex justify-center z-30 pointer-events-none md:hidden">
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => activeSubTab === 'today' ? setIsTaskModalOpen(true) : setIsHabitModalOpen(true)}
-          className={`pointer-events-auto w-14 h-14 rounded-full text-white flex items-center justify-center transition-colors ${
-            activeSubTab === 'today' 
-              ? 'bg-gh-blue shadow-[0_8px_30px_rgba(47,129,247,0.4)] hover:bg-gh-blue/90' 
-              : 'bg-gh-green shadow-[0_8px_30px_rgba(35,134,54,0.4)] hover:bg-gh-green-hover'
-          }`}
-        >
-          <Plus size={28} strokeWidth={3} />
-        </motion.button>
-      </div>
+      <AnimatePresence>
+        {!(isTaskModalOpen || isHabitModalOpen) && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.5, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.5, y: 20 }}
+            className="fixed bottom-8 left-0 right-0 flex justify-center z-30 pointer-events-none md:hidden"
+          >
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => activeSubTab === 'today' ? setIsTaskModalOpen(true) : setIsHabitModalOpen(true)}
+              className={`pointer-events-auto w-14 h-14 rounded-full text-white flex items-center justify-center transition-colors ${
+                activeSubTab === 'today' 
+                  ? 'bg-gh-blue shadow-[0_8px_30px_rgba(47,129,247,0.4)] hover:bg-gh-blue/90' 
+                  : 'bg-gh-green shadow-[0_8px_30px_rgba(35,134,54,0.4)] hover:bg-gh-green-hover'
+              }`}
+            >
+              <Plus size={28} strokeWidth={3} />
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

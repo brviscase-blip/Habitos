@@ -235,11 +235,11 @@ export function RegisterSubTab({ isModalOpen, setIsModalOpen }: RegisterSubTabPr
             />
             
             <motion.div 
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: "100%", opacity: 0 }}
-              transition={{ type: "tween", duration: 0.3, ease: "easeOut" }}
-              className="relative w-full h-full md:h-auto md:max-w-xl bg-gh-bg md:border md:border-gh-border md:rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.7)] overflow-hidden flex flex-col"
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="relative w-full h-full md:h-auto md:max-w-xl bg-gh-bg md:border md:border-gh-border md:rounded-2xl shadow-2xl overflow-hidden flex flex-col"
             >
               <div className="flex items-center justify-between p-4 md:p-5 border-b border-gh-border bg-gh-card/80 backdrop-blur-xl shrink-0">
                 <div className="flex items-center gap-3">
@@ -259,124 +259,126 @@ export function RegisterSubTab({ isModalOpen, setIsModalOpen }: RegisterSubTabPr
                 </button>
               </div>
 
-              <div className="p-4 md:p-6 flex-1 overflow-y-auto custom-scrollbar bg-gradient-to-b from-transparent to-gh-bg md:max-h-[85vh]">
-                <form onSubmit={handleSubmit} className="space-y-5 md:space-y-6 pb-20 md:pb-0">
-                  {/* 1. Nome Hábito */}
-                  <div className="space-y-2 group">
-                    <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-gh-text-secondary uppercase tracking-[0.2em] group-focus-within:text-gh-blue transition-colors">
-                      <Book size={12} /> Nome do Hábito
-                    </label>
-                    <input 
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="Ex: Meditação Matinal"
-                      className="w-full rounded-xl border border-gh-border bg-gh-bg px-4 py-3 md:py-3.5 text-sm md:text-base text-white placeholder-gray-600 focus:border-gh-blue focus:ring-4 focus:ring-gh-blue/10 outline-none transition-all font-medium shadow-inner"
-                    />
-                  </div>
-
-                  {/* 2. Frequencia Semanal */}
-                  <div className="space-y-2 md:space-y-3">
-                    <div className="flex items-center justify-between">
-                      <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-gh-text-secondary uppercase tracking-[0.2em]">
-                        <Calendar size={12} /> Frequência Semanal
+              <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden overscroll-none">
+                <div className="p-4 md:p-6 flex-1 overflow-hidden bg-gradient-to-b from-transparent to-gh-bg">
+                  <div className="space-y-5 md:space-y-6">
+                    {/* 1. Nome Hábito */}
+                    <div className="space-y-2 group">
+                      <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-gh-text-secondary uppercase tracking-[0.2em] group-focus-within:text-gh-blue transition-colors">
+                        <Book size={12} /> Nome do Hábito
                       </label>
-                      {frequency.length > 0 && (
-                        <button 
-                          type="button" 
-                          onClick={() => setFrequency([])}
-                          className="text-[8px] md:text-[9px] font-black text-gh-blue uppercase tracking-widest hover:underline"
-                        >
-                          Limpar
-                        </button>
-                      )}
+                      <input 
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Ex: Meditação Matinal"
+                        className="w-full rounded-xl border border-gh-border bg-gh-bg px-4 py-3 md:py-3.5 text-sm md:text-base text-white placeholder-gray-600 focus:border-gh-blue focus:ring-4 focus:ring-gh-blue/10 outline-none transition-all font-medium shadow-inner"
+                      />
                     </div>
-                    <div className="grid grid-cols-7 gap-1">
-                      {weekDays.map(day => (
-                        <button
-                          key={day.id}
-                          type="button"
-                          onClick={() => toggleDay(day.id)}
-                          className={`
-                            py-2.5 md:py-3 rounded-lg text-[9px] md:text-[10px] font-black border transition-all uppercase
-                            ${frequency.includes(day.id) 
-                              ? 'bg-gh-blue border-gh-blue text-white shadow-lg shadow-gh-blue/20' 
-                              : 'bg-gh-card border-gh-border text-gh-text-secondary hover:border-gray-500 hover:text-white'}
-                          `}
-                        >
-                          {day.label.charAt(0)}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
 
-                  {/* 3. Início do Hábito */}
-                  <div className="space-y-2 md:space-y-3">
-                    <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-gh-text-secondary uppercase tracking-[0.2em]">
-                      <Plus size={12} /> Data de Início
-                    </label>
-                    <CustomCalendar 
-                      selectedDate={startDate}
-                      onDateSelect={setStartDate}
-                      allowedDays={frequency}
-                    />
-                  </div>
-
-                  {/* 4. Quantidade de execuções */}
-                  <div className="space-y-2 md:space-y-3">
-                    <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-gh-text-secondary uppercase tracking-[0.2em]">
-                      <Hash size={12} /> Meta Diária
-                    </label>
-                    <div className="flex items-center justify-between bg-gh-card border border-gh-border rounded-xl p-2 md:p-2.5 shadow-inner">
-                      <button 
-                        type="button"
-                        onClick={() => setExecutions(Math.max(1, executions - 1))}
-                        className="w-10 h-10 md:w-11 md:h-11 rounded-lg bg-gh-bg text-white flex items-center justify-center hover:bg-gh-border transition-all border border-gh-border active:scale-95"
-                      >
-                        -
-                      </button>
-                      <div className="flex flex-col items-center">
-                        <span className="text-xl md:text-2xl font-black text-white leading-none">{executions}</span>
-                        <span className="text-[8px] md:text-[9px] text-gh-text-secondary font-black uppercase tracking-widest mt-1">vezes / dia</span>
+                    {/* 2. Frequencia Semanal */}
+                    <div className="space-y-2 md:space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-gh-text-secondary uppercase tracking-[0.2em]">
+                          <Calendar size={12} /> Frequência Semanal
+                        </label>
+                        {frequency.length > 0 && (
+                          <button 
+                            type="button" 
+                            onClick={() => setFrequency([])}
+                            className="text-[8px] md:text-[9px] font-black text-gh-blue uppercase tracking-widest hover:underline"
+                          >
+                            Limpar
+                          </button>
+                        )}
                       </div>
-                      <button 
-                        type="button"
-                        onClick={() => setExecutions(executions + 1)}
-                        className="w-10 h-10 md:w-11 md:h-11 rounded-lg bg-gh-bg text-white flex items-center justify-center hover:bg-gh-border transition-all border border-gh-border active:scale-95"
-                      >
-                        +
-                      </button>
+                      <div className="grid grid-cols-7 gap-1">
+                        {weekDays.map(day => (
+                          <button
+                            key={day.id}
+                            type="button"
+                            onClick={() => toggleDay(day.id)}
+                            className={`
+                              py-2.5 md:py-3 rounded-lg text-[9px] md:text-[10px] font-black border transition-all uppercase
+                              ${frequency.includes(day.id) 
+                                ? 'bg-gh-blue border-gh-blue text-white shadow-lg shadow-gh-blue/20' 
+                                : 'bg-gh-card border-gh-border text-gh-text-secondary hover:border-gray-500 hover:text-white'}
+                            `}
+                          >
+                            {day.label.charAt(0)}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
 
-                  {message && (
-                    <motion.div 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className={`p-4 rounded-xl text-xs font-black text-center uppercase tracking-widest ${message.type === 'success' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}
-                    >
-                      {message.text}
-                    </motion.div>
-                  )}
+                    {/* 3. Início do Hábito */}
+                    <div className="space-y-2 md:space-y-3">
+                      <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-gh-text-secondary uppercase tracking-[0.2em]">
+                        <Plus size={12} /> Data de Início
+                      </label>
+                      <CustomCalendar 
+                        selectedDate={startDate}
+                        onDateSelect={setStartDate}
+                        allowedDays={frequency}
+                      />
+                    </div>
 
-                  <div className="flex gap-3 pt-4">
-                    <Button 
-                      type="button" 
-                      variant="ghost" 
-                      onClick={() => setIsModalOpen(false)} 
-                      className="flex-1 text-gh-text-secondary hover:text-white font-bold text-xs uppercase tracking-widest h-11"
-                    >
-                      Cancelar
-                    </Button>
-                    <Button 
-                      type="submit" 
-                      className="flex-[2] font-black uppercase tracking-[0.15em] text-xs bg-gh-green hover:bg-gh-green-hover text-white shadow-[0_10px_30px_rgba(35,134,54,0.3)] h-11 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
-                    >
-                      Salvar Hábito
-                    </Button>
+                    {/* 4. Quantidade de execuções */}
+                    <div className="space-y-2 md:space-y-3">
+                      <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-gh-text-secondary uppercase tracking-[0.2em]">
+                        <Hash size={12} /> Meta Diária
+                      </label>
+                      <div className="flex items-center justify-between bg-gh-card border border-gh-border rounded-xl p-1 md:p-1.5 shadow-inner">
+                        <button 
+                          type="button"
+                          onClick={() => setExecutions(Math.max(1, executions - 1))}
+                          className="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-gh-bg text-white flex items-center justify-center hover:bg-gh-border transition-all border border-gh-border active:scale-95"
+                        >
+                          -
+                        </button>
+                        <div className="flex flex-col items-center">
+                          <span className="text-base md:text-lg font-black text-white leading-none">{executions}</span>
+                          <span className="text-[7px] md:text-[8px] text-gh-text-secondary font-black uppercase tracking-widest mt-0.5">vezes / dia</span>
+                        </div>
+                        <button 
+                          type="button"
+                          onClick={() => setExecutions(executions + 1)}
+                          className="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-gh-bg text-white flex items-center justify-center hover:bg-gh-border transition-all border border-gh-border active:scale-95"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                    {message && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className={`p-4 rounded-xl text-xs font-black text-center uppercase tracking-widest ${message.type === 'success' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}
+                      >
+                        {message.text}
+                      </motion.div>
+                    )}
                   </div>
-                </form>
-              </div>
+                </div>
+
+                <div className="p-4 md:p-6 border-t border-gh-border bg-gh-card/80 backdrop-blur-xl flex gap-3 shrink-0">
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    onClick={() => setIsModalOpen(false)} 
+                    className="flex-1 text-gh-text-secondary hover:text-white font-bold text-xs uppercase tracking-widest h-11"
+                  >
+                    Cancelar
+                  </Button>
+                  <Button 
+                    type="submit" 
+                    className="flex-1 font-black uppercase tracking-[0.15em] text-xs bg-gh-green hover:bg-gh-green-hover text-white shadow-[0_10px_30px_rgba(35,134,54,0.3)] h-11 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    Salvar Hábito
+                  </Button>
+                </div>
+              </form>
             </motion.div>
           </div>
         )}

@@ -37,8 +37,8 @@ export function CustomCalendar({ selectedDate, onDateSelect, allowedDays }: Cust
   const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
   return (
-    <div className="bg-gh-card border border-gh-border rounded-xl p-3 w-full shadow-inner">
-      <div className="flex items-center justify-between mb-2 px-1">
+    <div className="bg-gh-card border border-gh-border rounded-xl py-2 px-3 w-full shadow-inner">
+      <div className="flex items-center justify-between mb-1 px-1">
         <button 
           type="button"
           onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
@@ -58,7 +58,7 @@ export function CustomCalendar({ selectedDate, onDateSelect, allowedDays }: Cust
         </button>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 mb-1">
+      <div className="grid grid-cols-7 gap-1 mb-0.5">
         {weekDays.map(day => (
           <div key={day} className="text-[9px] font-black text-gh-text-secondary text-center uppercase tracking-widest opacity-50">
             {day.charAt(0)}
@@ -71,7 +71,6 @@ export function CustomCalendar({ selectedDate, onDateSelect, allowedDays }: Cust
           const isAllowed = allowedDays.includes(getDay(day));
           const isCurrentMonth = isSameMonth(day, monthStart);
           const isSelected = selectedDate && isSameDay(day, selectedDate);
-          const isToday = isSameDay(day, new Date());
           
           return (
             <button
@@ -80,7 +79,7 @@ export function CustomCalendar({ selectedDate, onDateSelect, allowedDays }: Cust
               disabled={!isAllowed}
               onClick={() => onDateSelect(day)}
               className={`
-                h-8 w-full text-[10px] rounded-lg flex flex-col items-center justify-center transition-all relative border
+                h-7 w-full text-[10px] rounded-lg flex flex-col items-center justify-center transition-all relative border
                 ${!isCurrentMonth ? 'opacity-20' : ''}
                 ${isSelected 
                   ? 'bg-gh-blue border-gh-blue text-white font-bold shadow-[0_0_15px_rgba(47,129,247,0.4)] z-10' 
@@ -90,9 +89,6 @@ export function CustomCalendar({ selectedDate, onDateSelect, allowedDays }: Cust
               `}
             >
               <span>{format(day, 'd')}</span>
-              {isToday && !isSelected && (
-                <div className="absolute bottom-1 w-1 h-1 bg-gh-blue rounded-full shadow-[0_0_5px_rgba(47,129,247,0.8)]" />
-              )}
             </button>
           );
         })}

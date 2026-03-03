@@ -11,9 +11,8 @@ export function HomePage() {
   return (
     <div className="min-h-screen bg-gh-bg text-gh-text-primary font-sans relative overflow-hidden">
       <BackgroundGlow />
+      <DashboardNavbar activeTab="home" />
       <div className="relative z-10">
-        <DashboardNavbar activeTab="home" />
-
         <div className="container mx-auto px-4 md:px-6 py-8 grid md:grid-cols-12 gap-8">
           {/* Sidebar */}
           <aside className="md:col-span-3 space-y-6">
