@@ -16,7 +16,7 @@ export function HabitsPage() {
       <BackgroundGlow />
       <DashboardNavbar activeTab="habits" />
       <div className={`relative ${isTaskModalOpen || isHabitModalOpen ? 'z-[2000]' : 'z-10'}`}>
-        <div className="w-full px-4 md:px-6 py-6 md:py-8">
+        <div className="w-full px-4 md:px-6 pb-6 md:pb-8 pt-24">
         {/* Desktop Navigation: Sleek Underline Tabs */}
         <div className="hidden md:flex items-center gap-8 mb-8 border-b border-gh-border">
           <button 

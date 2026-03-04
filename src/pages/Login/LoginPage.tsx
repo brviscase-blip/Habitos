@@ -54,7 +54,7 @@ export function LoginPage() {
           <p className="text-gray-500 text-[10px]">Insira seus dados para continuar</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-5">
+        <form onSubmit={handleLogin} className="space-y-5" autoComplete="off">
           {/* Username Input */}
           <div className="space-y-1">
             <div className="relative">
@@ -67,6 +67,9 @@ export function LoginPage() {
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Nome de usuário"
                 className="w-full bg-[#0f1218] text-white placeholder-gray-600 rounded-xl py-4 pl-12 pr-4 border border-white/5 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 outline-none transition-all text-sm font-medium"
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
               />
             </div>
           </div>
@@ -83,6 +86,9 @@ export function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Senha"
                 className="w-full bg-[#0f1218] text-white placeholder-gray-600 rounded-xl py-4 pl-12 pr-4 border border-white/5 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 outline-none transition-all text-sm font-medium"
+                autoComplete="new-password"
+                autoCorrect="off"
+                spellCheck={false}
               />
             </div>
           </div>
